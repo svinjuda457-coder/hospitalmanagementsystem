@@ -1,0 +1,896 @@
+﻿<%--<%@ Master Language="C#" AutoEventWireup="true"
+    CodeBehind="AdminMaster.Master.cs"
+    Inherits="Hospital_Management_System_01.AdminMaster" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>Medilab - Admin Panel</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #f4f7fb;
+        }
+
+        /* =========================
+           TOP HEADER (Blue)
+        ========================= */
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 65px;
+            background: #1977cc;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            z-index: 1100;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+        }
+
+        .header-brand .brand-name {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .header-brand .brand-sub {
+            font-size: 13px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .header-user i {
+            font-size: 22px;
+        }
+
+        /* =========================
+           SIDEBAR (Light White)
+        ========================= */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 65px;
+            width: 250px;
+            height: calc(100vh - 65px);
+            background: #ffffff;
+            border-right: 1px solid #e5e9f0;
+            z-index: 1000;
+            overflow-y: auto;
+            padding-top: 15px;
+        }
+
+        .menu-title {
+            font-size: 11px;
+            color: #8a94a6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 12px 22px 8px;
+            font-weight: 600;
+        }
+
+        .menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #4a5568;
+            text-decoration: none;
+            padding: 12px 20px;
+            margin: 3px 12px;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+            font-size: 14.5px;
+            font-weight: 500;
+        }
+
+        .menu a i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .menu a:hover {
+            background: #e8f4fc;
+            color: #1977cc;
+        }
+
+        .menu a.active {
+            background: #1977cc;
+            color: #ffffff !important;
+            box-shadow: 0 4px 12px rgba(25, 119, 204, 0.3);
+        }
+
+        .menu a.active i {
+            color: #ffffff;
+        }
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+        .main {
+            margin-left: 250px;
+            margin-top: 65px;
+            min-height: calc(100vh - 65px);
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 220px;
+            }
+            .main {
+                margin-left: 220px;
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+<form id="form1" runat="server">
+
+    <!-- =========================
+         TOP HEADER
+    ========================= -->
+    <header class="top-header">
+        <div class="header-brand">
+            <div>
+                <div class="brand-name">Medilab</div>
+                <div class="brand-sub">Hospital Management</div>
+            </div>
+        </div>
+
+        <div class="header-user">
+            <i class="bi bi-person-circle"></i>
+            <span>admin@gmail.com</span>
+        </div>
+    </header>
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+    <aside class="sidebar">
+        <div class="menu">
+            <div class="menu-title">Admin Panel</div>
+
+            <a href="AdminDashboard.aspx" class="<%= Request.Url.AbsolutePath.EndsWith("AdminDashboard.aspx") ? "active" : "" %>">
+                <i class="bi bi-speedometer2"></i>
+                Dashboard
+            </a>
+
+            <a href="Patients.aspx" class="<%= Request.Url.AbsolutePath.EndsWith("Patients.aspx") ? "active" : "" %>">
+                <i class="bi bi-people"></i>
+                Patients
+            </a>
+
+            <a href="Appointments.aspx" class="<%= Request.Url.AbsolutePath.EndsWith("Appointments.aspx") ? "active" : "" %>">
+                <i class="bi bi-calendar-check"></i>
+                Appointments
+            </a>
+
+            <a href="Doctors.aspx" class="<%= Request.Url.AbsolutePath.EndsWith("Doctors.aspx") ? "active" : "" %>">
+                <i class="bi bi-person-badge"></i>
+                Doctors
+            </a>
+
+            <a href="Departments.aspx" class="<%= Request.Url.AbsolutePath.EndsWith("Departments.aspx") ? "active" : "" %>">
+                <i class="bi bi-building"></i>
+                Departments
+            </a>
+
+            <a href="Services.aspx" class="<%= Request.Url.AbsolutePath.EndsWith("Services.aspx") ? "active" : "" %>">
+                <i class="bi bi-heart-pulse"></i>
+                Services
+            </a>
+
+            <a href="Enquiries.aspx" class="<%= Request.Url.AbsolutePath.EndsWith("Enquiries.aspx") ? "active" : "" %>">
+                <i class="bi bi-envelope"></i>
+                Enquiries
+            </a>
+
+            <a href="Reports.aspx" class="<%= Request.Url.AbsolutePath.EndsWith("Reports.aspx") ? "active" : "" %>">
+                <i class="bi bi-bar-chart"></i>
+                Reports
+            </a>
+        </div>
+    </aside>
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+    <main class="main">
+        <section class="content">
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </section>
+    </main>
+
+</form>
+</body>
+</html>--%>
+
+
+<%@ Master Language="C#" AutoEventWireup="true"
+    CodeBehind="AdminMaster.Master.cs"
+    Inherits="Hospital_Management_System_01.AdminMaster" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head runat="server">
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0" />
+
+    <title>Medilab - Admin Panel</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet" />
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f4f7fb;
+            color: #444;
+        }
+
+
+        /* =========================================
+           TOP HEADER
+        ========================================= */
+
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+
+            height: 65px;
+
+            background: #1977cc;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 30px;
+
+            z-index: 1100;
+
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+        }
+
+
+        /* BRAND */
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+
+            color: white;
+        }
+
+        .header-brand .brand-name {
+            font-size: 22px;
+            font-weight: 700;
+
+            letter-spacing: 0.3px;
+        }
+
+        .header-brand .brand-sub {
+            font-size: 13px;
+            font-weight: 400;
+
+            opacity: 0.95;
+        }
+
+
+        /* HEADER USER */
+
+        .header-user {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            color: white;
+
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .header-user i {
+            font-size: 28px;
+        }
+
+
+        /* =========================================
+           SIDEBAR
+        ========================================= */
+
+        .sidebar {
+
+            position: fixed;
+
+            left: 0;
+            top: 65px;
+
+            width: 250px;
+
+            height: calc(100vh - 65px);
+
+            background: #ffffff;
+
+            border-right: 1px solid #e5e9f0;
+
+            z-index: 1000;
+
+            display: flex;
+
+            flex-direction: column;
+
+            overflow: hidden;
+
+            padding-top: 15px;
+        }
+
+
+        /* =========================================
+           MENU
+        ========================================= */
+
+        .menu {
+
+            flex: 1;
+
+            overflow-y: auto;
+
+            overflow-x: hidden;
+
+            padding-bottom: 10px;
+        }
+
+
+        /* SCROLLBAR */
+
+        .menu::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .menu::-webkit-scrollbar-track {
+            background: #ffffff;
+        }
+
+        .menu::-webkit-scrollbar-thumb {
+            background: #d5dce5;
+            border-radius: 10px;
+        }
+
+        .menu::-webkit-scrollbar-thumb:hover {
+            background: #b8c2ce;
+        }
+
+
+        /* MENU TITLE */
+
+        .menu-title {
+
+            font-size: 11px;
+
+            color: #8a94a6;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            padding: 12px 22px 8px;
+
+            font-weight: 600;
+        }
+
+
+        /* MENU LINKS */
+
+        .menu a {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            color: #4a5568;
+
+            text-decoration: none;
+
+            padding: 12px 20px;
+
+            margin: 3px 12px;
+
+            border-radius: 8px;
+
+            transition: all 0.25s ease;
+
+            font-size: 14.5px;
+
+            font-weight: 500;
+        }
+
+
+        /* ICON */
+
+        .menu a i {
+
+            font-size: 18px;
+
+            width: 24px;
+
+            text-align: center;
+
+            flex-shrink: 0;
+        }
+
+
+        /* HOVER */
+
+        .menu a:hover {
+
+            background: #e8f4fc;
+
+            color: #1977cc;
+        }
+
+
+        /* ACTIVE */
+
+        .menu a.active {
+
+            background: #1977cc;
+
+            color: #ffffff !important;
+
+            box-shadow: 0 4px 12px rgba(25, 119, 204, 0.30);
+        }
+
+        .menu a.active i {
+
+            color: #ffffff;
+        }
+
+
+        /* =========================================
+           LOGOUT SECTION
+        ========================================= */
+
+        .logout-section {
+
+            flex-shrink: 0;
+
+            border-top: 1px solid #e5e9f0;
+
+            background: #ffffff;
+
+            padding: 10px 12px;
+        }
+
+
+        /* LOGOUT LINK */
+
+        .logout-section a {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            color: #dc3545;
+
+            text-decoration: none;
+
+            padding: 13px 20px;
+
+            border-radius: 8px;
+
+            font-size: 14.5px;
+
+            font-weight: 500;
+
+            transition: all 0.25s ease;
+        }
+
+
+        /* LOGOUT ICON */
+
+        .logout-section a i {
+
+            font-size: 18px;
+
+            width: 24px;
+
+            text-align: center;
+        }
+
+
+        /* LOGOUT HOVER */
+
+        .logout-section a:hover {
+
+            background: #fff1f1;
+
+            color: #dc3545;
+        }
+
+
+        /* =========================================
+           MAIN CONTENT
+        ========================================= */
+
+        .main {
+
+            margin-left: 250px;
+
+            margin-top: 65px;
+
+            min-height: calc(100vh - 65px);
+
+            background: #f4f7fb;
+        }
+
+
+        /* CONTENT */
+
+        .content {
+
+            padding: 30px;
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 768px) {
+
+            .sidebar {
+
+                width: 220px;
+            }
+
+            .main {
+
+                margin-left: 220px;
+            }
+
+            .content {
+
+                padding: 20px;
+            }
+
+            .top-header {
+
+                padding: 0 18px;
+            }
+
+            .header-brand .brand-name {
+
+                font-size: 19px;
+            }
+
+            .header-brand .brand-sub {
+
+                display: none;
+            }
+
+            .header-user span {
+
+                display: none;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <form id="form1" runat="server">
+
+
+        <!-- =========================================
+             TOP HEADER
+        ========================================= -->
+
+        <header class="top-header">
+
+            <div class="header-brand">
+
+                <div>
+
+                    <div class="brand-name">
+                        Medilab
+                    </div>
+
+                    <div class="brand-sub">
+                        Hospital Management
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="header-user">
+
+                <i class="bi bi-person-circle"></i>
+
+                <span>
+                    admin@gmail.com
+                </span>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =========================================
+             SIDEBAR
+        ========================================= -->
+
+        <aside class="sidebar">
+
+
+            <!-- SCROLLABLE MENU -->
+
+            <div class="menu">
+
+
+                <div class="menu-title">
+                    Admin Panel
+                </div>
+
+
+                <!-- DASHBOARD -->
+
+                <a href="AdminDashboard.aspx"
+                   class="<%= Request.Url.AbsolutePath.EndsWith("AdminDashboard.aspx") ? "active" : "" %>">
+
+                    <i class="bi bi-speedometer2"></i>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+
+                <!-- PATIENTS -->
+
+                <a href="Patients.aspx"
+                   class="<%= Request.Url.AbsolutePath.EndsWith("Patients.aspx") ? "active" : "" %>">
+
+                    <i class="bi bi-people"></i>
+
+                    <span>
+                        Patients
+                    </span>
+
+                </a>
+
+
+
+                <!-- APPOINTMENTS -->
+
+                <a href="Appointments.aspx"
+                   class="<%= Request.Url.AbsolutePath.EndsWith("Appointments.aspx") ? "active" : "" %>">
+
+                    <i class="bi bi-calendar-check"></i>
+
+                    <span>
+                        Appointments
+                    </span>
+
+                </a>
+
+
+
+                <!-- DOCTORS -->
+
+                <a href="Doctors.aspx"
+                   class="<%= Request.Url.AbsolutePath.EndsWith("Doctors.aspx") ? "active" : "" %>">
+
+                    <i class="bi bi-person-badge"></i>
+
+                    <span>
+                        Doctors
+                    </span>
+
+                </a>
+
+
+
+                <!-- DEPARTMENTS -->
+
+                <a href="Departments.aspx"
+                   class="<%= Request.Url.AbsolutePath.EndsWith("Departments.aspx") ? "active" : "" %>">
+
+                    <i class="bi bi-building"></i>
+
+                    <span>
+                        Departments
+                    </span>
+
+                </a>
+
+
+
+                <!-- SERVICES -->
+
+                <a href="Services.aspx"
+                   class="<%= Request.Url.AbsolutePath.EndsWith("Services.aspx") ? "active" : "" %>">
+
+                    <i class="bi bi-heart-pulse"></i>
+
+                    <span>
+                        Services
+                    </span>
+
+                </a>
+
+
+
+                <!-- ENQUIRIES -->
+
+                <a href="Enquiries.aspx"
+                   class="<%= Request.Url.AbsolutePath.EndsWith("Enquiries.aspx") ? "active" : "" %>">
+
+                    <i class="bi bi-envelope"></i>
+
+                    <span>
+                        Enquiries
+                    </span>
+
+                </a>
+
+
+
+                <!-- REPORTS -->
+
+                <a href="Reports.aspx"
+                   class="<%= Request.Url.AbsolutePath.EndsWith("Reports.aspx") ? "active" : "" %>">
+
+                    <i class="bi bi-bar-chart"></i>
+
+                    <span>
+                        Reports
+                    </span>
+
+                </a>
+
+
+            </div>
+
+
+
+            <!-- =========================================
+                 LOGOUT
+            ========================================= -->
+
+            <div class="logout-section">
+
+                <a href="Logout.aspx">
+
+                    <i class="bi bi-box-arrow-right"></i>
+
+                    <span>
+                        Logout
+                    </span>
+
+                </a>
+
+            </div>
+
+
+        </aside>
+
+
+
+        <!-- =========================================
+             MAIN CONTENT
+        ========================================= -->
+
+        <main class="main">
+
+            <section class="content">
+
+                <asp:ContentPlaceHolder
+                    ID="ContentPlaceHolder1"
+                    runat="server">
+
+                </asp:ContentPlaceHolder>
+
+            </section>
+
+        </main>
+
+
+    </form>
+
+</body>
+
+</html>
