@@ -1,198 +1,77 @@
-﻿//using System;
-//using System.Configuration;
-//using System.Data.SqlClient;
+﻿using System;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
-//namespace Hospital_Management_System_01
-//{
-//    public partial class Login : System.Web.UI.Page
-//    {
-//        string cs = ConfigurationManager
-//            .ConnectionStrings["HospitalDBConnectionString"]
-//            .ConnectionString;
-
-
-//        protected void Page_Load(object sender, EventArgs e)
-//        {
-
-//        }
-
-
-//        protected void btnLogin_Click(object sender, EventArgs e)
-//        {
-//            string email = txtLoginEmail.Text.Trim();
-//            string password = txtLoginPassword.Text.Trim();
-
-
-//            using (SqlConnection con = new SqlConnection(cs))
-//            {
-//                string query = @"SELECT PatientId, FullName
-//                                 FROM Patients
-//                                 WHERE Email = @Email
-//                                 AND Password = @Password";
-
-
-//                SqlCommand cmd =
-//                    new SqlCommand(query, con);
-
-
-//                cmd.Parameters.AddWithValue(
-//                    "@Email",
-//                    email
-//                );
-
-//                cmd.Parameters.AddWithValue(
-//                    "@Password",
-//                    password
-//                );
-
-
-//                con.Open();
-
-
-//                SqlDataReader dr = cmd.ExecuteReader();
-
-
-//                if (dr.Read())
-//                {
-//                    Session["PatientId"] =
-//                        dr["PatientId"].ToString();
-
-//                    Session["PatientName"] =
-//                        dr["FullName"].ToString();
-
-
-//                    Response.Redirect("PatientDashboard.aspx");
-//                }
-//                else
-//                {
-//                    Response.Write(
-//                        "<script>alert('Invalid Email or Password');</script>"
-//                    );
-//                }
-
-
-//                dr.Close();
-//            }
-//        }
-//    }
-//}
-using System;
-using System.Configuration;
-using System.Data.SqlClient;
+//New Namespace
+using System.Data.SqlClient; //For Connection
+using System.Data;           //For DataSet
+using System.Configuration;  //For connection string
 
 namespace Hospital_Management_System_01
 {
     public partial class Login : System.Web.UI.Page
     {
-        string cs = ConfigurationManager
-            .ConnectionStrings["HospitalDBConnectionString"]
-            .ConnectionString;
+        SqlConnection con; //For connection
+        SqlCommand cmd;    //For insert,update,Delete
+        SqlDataAdapter da; //For Container
+        DataSet ds;        //For Select
 
+        int i;
 
-        protected void Page_Load(object sender, EventArgs e)
+        string s = ConfigurationManager.ConnectionStrings["dbcon"].ConnectionString;
+         protected void Page_Load(object sender, EventArgs e)
         {
-
+            getcon();
         }
 
+        void getcon()
+        {
+            con = new SqlConnection(s);
+            con.Open();
+        }
 
         protected void btnLogin_Click(object sender, EventArgs e)
         {
-            string email = txtLoginEmail.Text.Trim();
-            string password = txtLoginPassword.Text.Trim();
-
-
-            // =========================================
-            // ADMIN LOGIN
-            // =========================================
-
-            if (email == "admin@gmail.com" &&
-                password == "admin123")
+            if (!(string.IsNullOrEmpty(txtLoginEmail.Text)) && !(string.IsNullOrEmpty(txtLoginPassword.Text)))
             {
-                Session["AdminEmail"] = email;
-                Session["UserType"] = "Admin";
+                // Admin Check
+                cmd = new SqlCommand("Select count(*) from Users where Email = '" + txtLoginEmail.Text + "' and Password = '" + txtLoginPassword.Text + "' and Role = 'Admin'", con);
+                i = Convert.ToInt16(cmd.ExecuteScalar());
 
-                Response.Redirect("AdminDashboard.aspx");
-
-                return;
-            }
-
-
-            // =========================================
-            // PATIENT LOGIN
-            // =========================================
-
-            using (SqlConnection con = new SqlConnection(cs))
-            {
-                string query = @"
-                    SELECT PatientId, FullName, Email
-                    FROM Patients
-                    WHERE Email = @Email
-                    AND Password = @Password";
-
-
-                SqlCommand cmd = new SqlCommand(query, con);
-
-
-                cmd.Parameters.AddWithValue(
-                    "@Email",
-                    email
-                );
-
-                cmd.Parameters.AddWithValue(
-                    "@Password",
-                    password
-                );
-
-
-                con.Open();
-
-
-                SqlDataReader dr = cmd.ExecuteReader();
-
-
-                if (dr.Read())
+                if (i > 0)
                 {
-                    // Patient ID
-                    Session["PatientId"] =
-                        dr["PatientId"].ToString();
-
-
-                    // Registered Patient Name
-                    Session["PatientName"] =
-                        dr["FullName"].ToString();
-
-
-                    // Patient Email
-                    Session["PatientEmail"] =
-                        dr["Email"].ToString();
-
-
-                    // User Type
-                    Session["UserType"] =
-                        "Patient";
-
-
-                    dr.Close();
-
-
-                    // Patient Dashboard
-                    Response.Redirect("PatientDashboard.aspx");
-
-                    return;
+                    Session["admin"] = txtLoginEmail.Text;
+                    Response.Redirect("~/Admin/AdminDashboard.aspx");
                 }
+                else
+                {
+                    // Doctor Check
+                    cmd = new SqlCommand("Select count(*) from Users where Email = '" + txtLoginEmail.Text + "' and Password = '" + txtLoginPassword.Text + "' and Role = 'Doctor'", con);
+                    i = Convert.ToInt16(cmd.ExecuteScalar());
 
+                    if (i > 0)
+                    {
+                        Session["doctor"] = txtLoginEmail.Text;
+                        Response.Redirect("~/Doctor/DoctorDashboard.aspx");
+                    }
+                    else
+                    {
+                        // Patient Check
+                        cmd = new SqlCommand("Select count(*) from Users where Email = '" + txtLoginEmail.Text + "' and Password = '" + txtLoginPassword.Text + "' and Role = 'Patient'", con);
+                        i = Convert.ToInt16(cmd.ExecuteScalar());
 
-                dr.Close();
+                        if (i > 0)
+                        {
+                            Session["patient"] = txtLoginEmail.Text;
+                            Response.Redirect("~/Patient/PatientDashboard.aspx");
+                        }
+                        else
+                        {
+                            Response.Write("Invalid Email and Password");
+                        }
+                    }
+                }
             }
-
-
-            // =========================================
-            // INVALID LOGIN
-            // =========================================
-
-            Response.Write(
-                "<script>alert('Invalid Email or Password');</script>"
-            );
         }
     }
 }

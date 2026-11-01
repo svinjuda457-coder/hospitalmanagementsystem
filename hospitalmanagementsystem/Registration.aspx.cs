@@ -1,381 +1,253 @@
-﻿using System;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
+﻿//using System;
+//using System.Web.UI;
+//using System.Web.UI.WebControls;
+//using System.Data.SqlClient;
+//using System.Data;
+//using System.Configuration;
+
+//namespace Hospital_Management_System_01
+//{
+//    public partial class Registration : System.Web.UI.Page
+//    {
+
+//        SqlConnection con;
+//        SqlCommand cmd;
+//        SqlDataAdapter da;
+//        DataSet ds;
+//        string fnm;
+
+//        string s = ConfigurationManager.ConnectionStrings["dbcon"].ConnectionString;
+
+//        void getCon()
+//        {
+//            con = new SqlConnection(s);
+//            con.Open();
+//        }
+
+//        void fillGrid()
+//        {
+//            getCon();
+
+//            da = new SqlDataAdapter(
+//                "select * from dbo.Registration", con);
+
+//            ds = new DataSet();
+//            da.Fill(ds);
+
+//            GridView1.DataSource = ds;
+//            GridView1.DataBind();
+
+//            con.Close();
+//        }
+
+//        void fillData()
+//        {
+//            getCon();
+
+//            da = new SqlDataAdapter(
+//                "select * from Registration where Id='" +
+//                ViewState["id"] + "'", con);
+
+//            ds = new DataSet();
+//            da.Fill(ds);
+
+//            if (ds.Tables[0].Rows.Count > 0)
+//            {
+//                txtnm.Text =
+//                    ds.Tables[0].Rows[0]["Name"].ToString();
+
+//                rbdgndr.SelectedValue = ds.Tables[0].Rows[0]["Gender"].ToString();
+//                txteml.Text = ds.Tables[0].Rows[0]["Email"].ToString();
+//                txtct.Text = ds.Tables[0].Rows[0]["City"].ToString();
+//                txtAddress.Text = ds.Tables[0].Rows[0]["Address"].ToString();
+//                txtMobile.Text = ds.Tables[0].Rows[0]["Mobile"].ToString();
+//            }
+
+//            con.Close();
+//        }
+
+//        public void clear()
+//        {
+//            txtnm.Text = string.Empty;
+//            txtAddress.Text = string.Empty;
+//            txteml.Text = string.Empty;
+//            txtMobile.Text = string.Empty;
+//            txtct.Text = string.Empty;
+
+//            rbdgndr.SelectedIndex = -1;
+//        }
+
+//        protected void Page_Load(object sender, EventArgs e)
+//        {
+//            if (!IsPostBack)
+//            {
+//                fillGrid();
+//            }
+//        }
+
+//        protected void btnRegister_Click(object sender, EventArgs e)
+//        {
+//            if (btnRegister.Text == "Register")
+//            {
+//                getCon();
+
+//                cmd = new SqlCommand(
+//                    "insert into Registration " +
+//                    "(Name,Gender,Email,City,Address,Mobile) " +
+//                    "values(@Name,@Gender,@Email,@City,@Address,@Mobile)",
+//                    con);
+
+//                cmd.Parameters.AddWithValue("@Name", txtnm.Text);
+//                cmd.Parameters.AddWithValue("@Gender", rbdgndr.SelectedValue);
+//                cmd.Parameters.AddWithValue("@Email", txteml.Text);
+//                cmd.Parameters.AddWithValue("@City", txtct.Text);
+//                cmd.Parameters.AddWithValue("@Address", txtAddress.Text);
+//                cmd.Parameters.AddWithValue("@Mobile", txtMobile.Text);
+
+//                cmd.ExecuteNonQuery();
+
+//                con.Close();
+
+//                fillGrid();
+
+//                Response.Write("<script>alert('Data Inserted Successfully');</script>");
+
+//                clear();
+//            }
+//            else
+//            {
+//                getCon();
+
+//                cmd = new SqlCommand("update Registration set " + "Name=@Name," + "Gender=@Gender," + "Email=@Email," + "City=@City," +  "Address=@Address," + "Mobile=@Mobile " + "where Id=@Id", con);
+//                cmd.Parameters.AddWithValue("@Name", txtnm.Text);
+//                cmd.Parameters.AddWithValue("@Gender", rbdgndr.SelectedValue);
+//                cmd.Parameters.AddWithValue("@Email", txteml.Text);
+//                cmd.Parameters.AddWithValue("@City", txtct.Text);
+//                cmd.Parameters.AddWithValue("@Address", txtAddress.Text);
+//                cmd.Parameters.AddWithValue("@Mobile", txtMobile.Text);
+//                cmd.Parameters.AddWithValue("@Id", ViewState["id"]);
+
+//                cmd.ExecuteNonQuery();
+
+//                con.Close();
+
+//                fillGrid();
+//                clear();
+
+//                Response.Write("<script>alert('Data Updated Successfully');</script>");
+
+//                btnRegister.Text = "Register";
+//            }
+//        }
+
+//        // -------------------------------------------------------
+//        // GridView1_RowCommand
+//        // -------------------------------------------------------
+//        protected void Gridview1_RowCommand(object sender,GridViewCommandEventArgs e)
+//        {
+//            if (e.CommandName == "cmd_edit")
+//            {
+//                int id = Convert.ToInt32(e.CommandArgument);
+
+//                ViewState["id"] = id;
+
+//                btnRegister.Text = "Update";
+
+//                fillData();
+//            }
+//            else if (e.CommandName == "cmd_delete")
+//            {
+//                getCon();
+
+//                cmd = new SqlCommand("delete from Registration where Id=@Id",con);
+//                cmd.Parameters.AddWithValue("@Id", e.CommandArgument);
+
+//                cmd.ExecuteNonQuery();
+
+//                con.Close();
+
+//                fillGrid();
+
+//                Response.Write("<script>alert('Data Deleted Successfully');</script>");
+//            }
+//        }
+//    }
+//}
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
 using System.Web.UI.WebControls;
+
+//New Namespace
+
+using System.Data.SqlClient; //For Connection
+using System.Data;           //For DataSet
+using System.Configuration;  //For connection string
 
 namespace Hospital_Management_System_01
 {
     public partial class Registration : System.Web.UI.Page
     {
-        string cs = ConfigurationManager
-            .ConnectionStrings["HospitalDBConnectionString"]
-            .ConnectionString;
+        SqlConnection con; //For connection
+        SqlCommand cmd;    //For insert,update,Delete
+        SqlDataAdapter da; //For Container
+        DataSet ds;        //For Select
 
-
-        // =========================================
-        // PAGE LOAD
-        // =========================================
+        string s = ConfigurationManager.ConnectionStrings["dbcon"].ConnectionString;
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            getcon();
             if (!IsPostBack)
             {
-                LoadPatients();
+                fillgrid();
             }
         }
 
-
-        // =========================================
-        // LOAD PATIENTS
-        // =========================================
-
-        private void LoadPatients()
+        void getcon()
         {
-            using (SqlConnection con = new SqlConnection(cs))
-            {
-                string query = @"SELECT
-                                    PatientId,
-                                    FullName,
-                                    Email,
-                                    Mobile,
-                                    Gender,
-                                    Address
-                                 FROM Patients
-                                 ORDER BY PatientId DESC";
-
-                SqlDataAdapter da =
-                    new SqlDataAdapter(query, con);
-
-                DataTable dt = new DataTable();
-
-                da.Fill(dt);
-
-                gvPatients.DataSource = dt;
-
-                gvPatients.DataBind();
-            }
+            con = new SqlConnection(s);
+            con.Open();
         }
 
+        void fillgrid()
+        {
+            da = new SqlDataAdapter("Select * from Registration", con);
+            ds = new DataSet();
+            da.Fill(ds);
+            GridView1.DataSource = ds;
+            GridView1.DataBind();
+        }
 
-        // =========================================
-        // REGISTER PATIENT
-        // =========================================
+        void clear()
+        {
+            txtnm.Text = "";
+            txtMobile.Text = "";
+            txtAddress.Text = "";
+            txteml.Text = "";
+            txtct.Text = "";
+            rbdgndr.ClearSelection();
+        }
 
         protected void btnRegister_Click(object sender, EventArgs e)
         {
-            string gender = "";
+            getcon();
 
+            cmd = new SqlCommand("insert into Registration(Name,Email,Password,Mobile,Address,Gender) values('" + txtnm.Text + "','" + txteml.Text + "','" + txtct.Text + "','" + txtMobile.Text + "','" + txtAddress.Text + "','" + rbdgndr.SelectedValue + "')", con);
+            cmd.ExecuteNonQuery();
 
-            // Get Gender
-
-            if (rbMale.Checked)
-            {
-                gender = "Male";
-            }
-            else if (rbFemale.Checked)
-            {
-                gender = "Female";
-            }
-            else if (rbOther.Checked)
-            {
-                gender = "Other";
-            }
-
-
-            // Password Check
-
-            if (txtPassword.Text != txtConfirmPassword.Text)
-            {
-                Response.Write(
-                    "<script>alert('Password and Confirm Password do not match');</script>"
-                );
-
-                return;
-            }
-
-
-            // Insert Patient
-
-            using (SqlConnection con =
-                   new SqlConnection(cs))
-            {
-                string query = @"INSERT INTO Patients
-                                (
-                                    FullName,
-                                    Email,
-                                    Mobile,
-                                    Gender,
-                                    Address,
-                                    Password
-                                )
-                                VALUES
-                                (
-                                    @FullName,
-                                    @Email,
-                                    @Mobile,
-                                    @Gender,
-                                    @Address,
-                                    @Password
-                                )";
-
-
-                SqlCommand cmd =
-                    new SqlCommand(query, con);
-
-
-                cmd.Parameters.AddWithValue(
-                    "@FullName",
-                    txtFullName.Text
-                );
-
-                cmd.Parameters.AddWithValue(
-                    "@Email",
-                    txtEmail.Text
-                );
-
-                cmd.Parameters.AddWithValue(
-                    "@Mobile",
-                    txtMobile.Text
-                );
-
-                cmd.Parameters.AddWithValue(
-                    "@Gender",
-                    gender
-                );
-
-                cmd.Parameters.AddWithValue(
-                    "@Address",
-                    txtAddress.Text
-                );
-
-                cmd.Parameters.AddWithValue(
-                    "@Password",
-                    txtPassword.Text
-                );
-
-
-                con.Open();
-
-                cmd.ExecuteNonQuery();
-
-                con.Close();
-            }
-
-
-            // Refresh GridView
-
-            LoadPatients();
-
-
-            // Success Message
-
-            Response.Write(
-                "<script>alert('Patient Registration Successful');</script>"
-            );
-
-
-            // Clear Form
-
-            txtFullName.Text = "";
-            txtEmail.Text = "";
-            txtMobile.Text = "";
-            txtAddress.Text = "";
-            txtPassword.Text = "";
-            txtConfirmPassword.Text = "";
-
-            rbMale.Checked = false;
-            rbFemale.Checked = false;
-            rbOther.Checked = false;
+            clear();
+            fillgrid();
+            Response.Write("Patient Registered Successfully");
         }
 
-
-        // =========================================
-        // EDIT
-        // =========================================
-
-        protected void gvPatients_RowEditing(
-            object sender,
-            GridViewEditEventArgs e)
+        protected void Gridview1_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            gvPatients.EditIndex = e.NewEditIndex;
 
-            LoadPatients();
-        }
-
-
-        // =========================================
-        // CANCEL EDIT
-        // =========================================
-
-        protected void gvPatients_RowCancelingEdit(
-            object sender,
-            GridViewCancelEditEventArgs e)
-        {
-            gvPatients.EditIndex = -1;
-
-            LoadPatients();
-        }
-
-
-        // =========================================
-        // UPDATE
-        // =========================================
-
-        protected void gvPatients_RowUpdating(
-            object sender,
-            GridViewUpdateEventArgs e)
-        {
-            int patientId =
-                Convert.ToInt32(
-                    gvPatients.DataKeys[e.RowIndex].Value
-                );
-
-
-            GridViewRow row =
-                gvPatients.Rows[e.RowIndex];
-
-
-            // Find TextBoxes
-
-            TextBox txtName =
-                (TextBox)row.FindControl("txtGridFullName");
-
-            TextBox txtEmail =
-                (TextBox)row.FindControl("txtGridEmail");
-
-            TextBox txtMobile =
-                (TextBox)row.FindControl("txtGridMobile");
-
-            TextBox txtGender =
-                (TextBox)row.FindControl("txtGridGender");
-
-            TextBox txtAddress =
-                (TextBox)row.FindControl("txtGridAddress");
-
-
-            // Update Database
-
-            using (SqlConnection con =
-                   new SqlConnection(cs))
-            {
-                string query = @"UPDATE Patients
-                                 SET
-                                    FullName = @FullName,
-                                    Email = @Email,
-                                    Mobile = @Mobile,
-                                    Gender = @Gender,
-                                    Address = @Address
-                                 WHERE PatientId = @PatientId";
-
-
-                SqlCommand cmd =
-                    new SqlCommand(query, con);
-
-
-                cmd.Parameters.AddWithValue(
-                    "@FullName",
-                    txtName.Text
-                );
-
-                cmd.Parameters.AddWithValue(
-                    "@Email",
-                    txtEmail.Text
-                );
-
-                cmd.Parameters.AddWithValue(
-                    "@Mobile",
-                    txtMobile.Text
-                );
-
-                cmd.Parameters.AddWithValue(
-                    "@Gender",
-                    txtGender.Text
-                );
-
-                cmd.Parameters.AddWithValue(
-                    "@Address",
-                    txtAddress.Text
-                );
-
-                cmd.Parameters.AddWithValue(
-                    "@PatientId",
-                    patientId
-                );
-
-
-                con.Open();
-
-                cmd.ExecuteNonQuery();
-
-                con.Close();
-            }
-
-
-            // Exit Edit Mode
-
-            gvPatients.EditIndex = -1;
-
-            LoadPatients();
-
-
-            Response.Write(
-                "<script>alert('Patient Updated Successfully');</script>"
-            );
-        }
-
-
-        // =========================================
-        // DELETE
-        // =========================================
-
-        protected void gvPatients_RowDeleting(
-            object sender,
-            GridViewDeleteEventArgs e)
-        {
-            int patientId =
-                Convert.ToInt32(
-                    gvPatients.DataKeys[e.RowIndex].Value
-                );
-
-
-            using (SqlConnection con =
-                   new SqlConnection(cs))
-            {
-                string query =
-                    "DELETE FROM Patients WHERE PatientId=@PatientId";
-
-
-                SqlCommand cmd =
-                    new SqlCommand(query, con);
-
-
-                cmd.Parameters.AddWithValue(
-                    "@PatientId",
-                    patientId
-                );
-
-
-                con.Open();
-
-                cmd.ExecuteNonQuery();
-
-                con.Close();
-            }
-
-
-            // Refresh GridView
-
-            LoadPatients();
-
-
-            Response.Write(
-                "<script>alert('Patient Deleted Successfully');</script>"
-            );
         }
     }
 }
-
-
-
-
