@@ -1,0 +1,379 @@
+﻿<%--<%@ Master Language="C#" AutoEventWireup="true"
+    CodeBehind="PatientMaster.master.cs"
+    Inherits="Hospital_Management_System_01.Patient.PatientMaster" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Medilab - Patient Panel</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fb;
+        }
+
+        .topbar {
+            height: 65px;
+            background-color: white;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            margin-left: 250px;
+        }
+
+        .topbar h4 {
+            color: #0d6efd;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .patient-name {
+            color: #555;
+            font-weight: 500;
+        }
+
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: #111c2e;
+            padding-top: 20px;
+        }
+
+        .logo {
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .logo span {
+            color: #0d6efd;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #c8d0dc;
+            text-decoration: none;
+            padding: 14px 25px;
+            font-size: 15px;
+        }
+
+        .sidebar a:hover {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        .sidebar i {
+            margin-right: 12px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+        }
+
+        .logout {
+            margin-top: 25px;
+            border-top: 1px solid #344054;
+            padding-top: 10px;
+        }
+
+    </style>
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+
+</head>
+
+<body>
+
+<form id="form1" runat="server">
+
+    <!-- Sidebar -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+            Medi<span>lab</span>
+        </div>
+
+        <a href="PatientDashboard.aspx">
+            <i class="bi bi-speedometer2"></i>
+            Dashboard
+        </a>
+
+        <a href="PatientProfile.aspx">
+            <i class="bi bi-person-circle"></i>
+            My Profile
+        </a>
+
+        <a href="BookAppointment.aspx">
+            <i class="bi bi-calendar-plus"></i>
+            Book Appointment
+        </a>
+
+        <a href="MyAppointments.aspx">
+            <i class="bi bi-calendar-check"></i>
+            My Appointments
+        </a>
+
+        <a href="MyPrescriptions.aspx">
+            <i class="bi bi-capsule"></i>
+            My Prescriptions
+        </a>
+
+        <a href="AppointmentHistory.aspx">
+            <i class="bi bi-clock-history"></i>
+            Appointment History
+        </a>
+
+        <div class="logout">
+
+            <a href="../Login.aspx">
+                <i class="bi bi-box-arrow-right"></i>
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Topbar -->
+
+    <div class="topbar">
+
+        <h4>Patient Panel</h4>
+
+        <div class="patient-name">
+
+            <i class="bi bi-person-circle"></i>
+            Patient
+
+        </div>
+
+    </div>
+
+
+    <!-- Main Content -->
+
+    <div class="main-content">
+
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
+
+    </div>
+
+</form>
+
+</body>
+</html>--%>
+
+
+<%@ Master Language="C#" AutoEventWireup="true"
+    CodeBehind="PatientMaster.master.cs"
+    Inherits="Hospital_Management_System_01.Patient.PatientMaster" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>Medilab - Patient Panel</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f8fc;
+        }
+
+        /* TOP HEADER */
+        .top-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: #1977cc;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .patient-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .patient-user i {
+            font-size: 32px;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 250px;
+            height: calc(100vh - 70px);
+            background: #172536;
+            padding-top: 20px;
+            z-index: 999;
+            overflow-y: auto;
+        }
+
+        .sidebar-title {
+            color: white;
+            font-size: 18px;
+            padding: 15px 25px;
+            font-weight: bold;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #dbe7f5;
+            text-decoration: none;
+            padding: 14px 25px;
+            font-size: 16px;
+        }
+
+        .sidebar a:hover {
+            background: #1977cc;
+            color: white;
+        }
+
+        .sidebar a i {
+            margin-right: 15px;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+        }
+
+        /* MAIN */
+        .main-content {
+            margin-left: 250px;
+            padding: 100px 30px 30px 30px;
+            min-height: 100vh;
+        }
+
+        .page-title {
+            font-size: 30px;
+            font-weight: bold;
+            color: #17365d;
+        }
+
+        .welcome {
+            color: #58708d;
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+<body>
+<form id="form1" runat="server">
+
+    <!-- TOP HEADER -->
+    <div class="top-header">
+        <div class="logo">
+            <i class="bi bi-hospital"></i>
+            Medilab
+        </div>
+        <div class="patient-user">
+            <i class="bi bi-bell"></i>
+            <i class="bi bi-person-circle"></i>
+            <div>
+                <b>Patient</b>
+                <br />
+                <small>patient@medilab.com</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-title">
+            <i class="bi bi-person-fill"></i>
+            Patient Panel
+        </div>
+
+        <a href="PatientDashboard.aspx">
+            <i class="bi bi-house-fill"></i>
+            Dashboard
+        </a>
+        <a href="PatientProfile.aspx">
+            <i class="bi bi-person-circle"></i>
+            My Profile
+        </a>
+        <a href="BookAppointment.aspx">
+            <i class="bi bi-calendar-plus"></i>
+            Book Appointment
+        </a>
+        <a href="MyAppointments.aspx">
+            <i class="bi bi-calendar-check-fill"></i>
+            My Appointments
+        </a>
+        <a href="MyPrescriptions.aspx">
+            <i class="bi bi-capsule"></i>
+            My Prescriptions
+        </a>
+        <a href="AppointmentHistory.aspx">
+            <i class="bi bi-clock-history"></i>
+            Appointment History
+        </a>
+
+        <div class="logout">
+            <a href="../Login.aspx">
+                <i class="bi bi-box-arrow-right"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
+    </div>
+
+</form>
+</body>
+</html>
