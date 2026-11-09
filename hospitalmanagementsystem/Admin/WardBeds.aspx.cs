@@ -5,34 +5,28 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-//New Namespace
-
-using System.Data.SqlClient; //For Connection
-using System.Data;           //For DataSet
-using System.Configuration;  //For connection string
+using System.Data.SqlClient;
+using System.Data;
+using System.Configuration;
 
 namespace Hospital_Management_System_01
 {
     public partial class WardBeds : System.Web.UI.Page
     {
-        SqlConnection con; //For connection
-        SqlCommand cmd;    //For insert,update,Delete
-        SqlDataAdapter da; //For Container
-        DataSet ds;        //For Select
+        SqlConnection con;
+        SqlCommand cmd;
+        SqlDataAdapter da;
+        DataSet ds;
 
         string s = ConfigurationManager.ConnectionStrings["dbcon"].ConnectionString;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["admin"] == null)
-            {
-                Response.Redirect("~/Login.aspx");
-            }
             getcon();
             if (!IsPostBack)
             {
-                fillWards();
-                fillBeds();
+                bindWard();
+                bindBed();
             }
         }
 
@@ -42,18 +36,35 @@ namespace Hospital_Management_System_01
             con.Open();
         }
 
-        void fillWards()
+        void clearWard()
         {
-            da = new SqlDataAdapter("Select * from Wards order by WardId desc", con);
+            txtWardName.Text = "";
+            txtWardType.Text = "";
+            txtWardDescription.Text = "";
+        }
+
+        void clearBed()
+        {
+            txtBedNumber.Text = "";
+            txtWardId.Text = "";
+            txtBedType.Text = "";
+            txtBedStatus.Text = "";
+        }
+
+        void bindWard()
+        {
+            getcon();
+            da = new SqlDataAdapter("select * from Wards", con);
             ds = new DataSet();
             da.Fill(ds);
             GridViewWards.DataSource = ds;
             GridViewWards.DataBind();
         }
 
-        void fillBeds()
+        void bindBed()
         {
-            da = new SqlDataAdapter("Select * from Beds order by BedId desc", con);
+            getcon();
+            da = new SqlDataAdapter("select * from Beds", con);
             ds = new DataSet();
             da.Fill(ds);
             GridViewBeds.DataSource = ds;
@@ -65,10 +76,8 @@ namespace Hospital_Management_System_01
             getcon();
             cmd = new SqlCommand("insert into Wards(WardName,WardType,Description) values('" + txtWardName.Text + "','" + txtWardType.Text + "','" + txtWardDescription.Text + "')", con);
             cmd.ExecuteNonQuery();
-            txtWardName.Text = "";
-            txtWardType.Text = "";
-            txtWardDescription.Text = "";
-            fillWards();
+            clearWard();
+            bindWard();
             Response.Write("Ward Added Successfully");
         }
 
@@ -77,38 +86,33 @@ namespace Hospital_Management_System_01
             getcon();
             cmd = new SqlCommand("insert into Beds(BedNumber,WardId,BedType,Status) values('" + txtBedNumber.Text + "','" + txtWardId.Text + "','" + txtBedType.Text + "','" + txtBedStatus.Text + "')", con);
             cmd.ExecuteNonQuery();
-            txtBedNumber.Text = "";
-            txtWardId.Text = "";
-            txtBedType.Text = "";
-            txtBedStatus.Text = "";
-            fillBeds();
+            clearBed();
+            bindBed();
             Response.Write("Bed Added Successfully");
         }
 
         protected void GridViewWards_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            int id = Convert.ToInt32(e.CommandArgument);
-
             if (e.CommandName == "DeleteWard")
             {
                 getcon();
-                cmd = new SqlCommand("Delete from Wards where WardId='" + id + "'", con);
+                string id = e.CommandArgument.ToString();
+                cmd = new SqlCommand("delete from Wards where WardId='" + id + "'", con);
                 cmd.ExecuteNonQuery();
-                fillWards();
+                bindWard();
                 Response.Write("Ward Deleted Successfully");
             }
         }
 
         protected void GridViewBeds_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            int id = Convert.ToInt32(e.CommandArgument);
-
             if (e.CommandName == "DeleteBed")
             {
                 getcon();
-                cmd = new SqlCommand("Delete from Beds where BedId='" + id + "'", con);
+                string id = e.CommandArgument.ToString();
+                cmd = new SqlCommand("delete from Beds where BedId='" + id + "'", con);
                 cmd.ExecuteNonQuery();
-                fillBeds();
+                bindBed();
                 Response.Write("Bed Deleted Successfully");
             }
         }

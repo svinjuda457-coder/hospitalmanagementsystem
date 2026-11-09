@@ -1,9 +1,8 @@
-﻿INSERT INTO Patients (PatientName, Email, Password, Mobile)
+﻿INSERT INTO Beds (BedNumber, WardId, BedType, Status) 
 VALUES 
-('Surbhi', 'surbhi@gmail.com', 'patient123', '9876543201'),
-('Savan', 'savan@gmail.com', 'patient123', '9876543202'),
-('Ravi', 'ravi@gmail.com', 'patient123', '9876543203'),
-('Janvi', 'janvi@gmail.com', 'patient123', '9876543204'),
-('Vivek', 'vivek@gmail.com', 'patient123', '9876543205'),
-('Hetvi', 'hetvi@gmail.com', 'patient123', '9876543206'),
-('Happy', 'happy@gmail.com', 'patient123', '9876543207');
+('B-101', 1, 'General', 'Available'),
+('B-102', 1, 'General', 'Available'),
+('B-201', 2, 'ICU', 'Occupied'),
+('B-202', 2, 'ICU', 'Available'),
+('B-301', 3, 'Semi-Special', 'Available'),
+('B-302', 3, 'Special', 'Available');

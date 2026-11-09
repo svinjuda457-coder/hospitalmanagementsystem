@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="Ward & Beds" Language="C#"
     MasterPageFile="~/Admin/AdminMaster.Master"
     AutoEventWireup="true"
-    CodeBehind="WardBeds.aspx.cs"
+    CodeFile="WardBeds.aspx.cs"
     Inherits="Hospital_Management_System_01.WardBeds" %>
 
 <asp:Content ID="Content1"
@@ -37,7 +37,7 @@
 
                 <div class="col-md-4">
 
-                    <label>Ward Name</label>
+                    <label>Ward Name</label>xc
 
                     <asp:TextBox
                         ID="txtWardName"
